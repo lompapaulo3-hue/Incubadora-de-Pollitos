@@ -1,0 +1,45 @@
+name: Construir APK de Incubadora de Pollitos
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar archivos
+        uses: actions/checkout@v4
+
+      - name: Preparar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Preparar Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Instalar Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Descomprimir proyecto
+        run: |
+          unzip -q IncubadoraPollitosAndroid_proyecto.zip -d source
+          echo "ANDROID_PROJECT=source/IncubadoraPollitosAndroid" >> "$GITHUB_ENV"
+
+      - name: Compilar aplicación
+        run: gradle --no-daemon -p "$ANDROID_PROJECT" assembleDebug
+
+      - name: Guardar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Incubadora-de-Pollitos-APK
+          path: source/IncubadoraPollitosAndroid/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
