@@ -23,7 +23,7 @@ jobs:
       - name: Preparar Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: ''
+          packages: 'platform-tools,platforms;android-35,build-tools;35.0.0'
 
       - name: Instalar Gradle
         uses: gradle/actions/setup-gradle@v4
