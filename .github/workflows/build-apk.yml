@@ -22,6 +22,8 @@ jobs:
 
       - name: Preparar Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: ''
 
       - name: Instalar Gradle
         uses: gradle/actions/setup-gradle@v4
